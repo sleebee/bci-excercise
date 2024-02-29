@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "fd2d26d1-b010-482e-90d9-2e00749a070a",
+		"name": "BCI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "277830"
+	},
+	"item": [
+		{
+			"name": "register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = JSON.parse(responseBody)\r",
+							"postman.setEnvironmentVariable(\"bci_token\", data.token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"name\": \"Juan Rodriguez\", \r\n  \"email\": \"juan@rodriguez.cl\", \r\n  \"password\": \"Hunter$2#\", \r\n  \"phones\": [ { \r\n    \"number\": \"1234567\", \r\n    \"citycode\": \"1\", \r\n   \"contrycode\": \"57\" \r\n  }] \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8005/user/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8005",
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bci_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8005/user",
+					"host": [
+						"localhost"
+					],
+					"port": "8005",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Current user information",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bci_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8005/user/me",
+					"host": [
+						"localhost"
+					],
+					"port": "8005",
+					"path": [
+						"user",
+						"me"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
