@@ -19,8 +19,10 @@ import com.gl.bci.exercise.dtos.UserSuccessResponseDto;
 import com.gl.bci.exercise.security.jwt.JwtService;
 import com.gl.bci.exercise.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -33,6 +35,11 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserSuccessResponseDto createNewUser(UserDto userToCreate) {
+    if (userToCreate == null) {
+      log.error("The received user cannot be null");
+      return null;
+    }
+
     UserEntity entity = new UserEntity();
     entity.setName(userToCreate.name());
     entity.setPassword(passwordEncoder.encode(userToCreate.password()));
@@ -78,22 +85,25 @@ public class UserServiceImpl implements UserService {
     return allUsers;
   }
 
-  private UserSuccessResponseDto userEntityToDto(UserEntity entity) {
+  UserSuccessResponseDto userEntityToDto(UserEntity entity) {
+    if (entity == null)
+      return null;
+
     return UserSuccessResponseDto.of(entity.getName(), entity.getEmail(), null,
         phoneEntitiesToDtos(entity.getPhones()), entity.getId(), entity.getCreated(),
         entity.getModified(), entity.getLastLogin(), entity.getToken());
   }
 
-  private List<PhoneEntity> phoneDtosToEntities(List<UserPhoneDto> phones) {
+  List<PhoneEntity> phoneDtosToEntities(List<UserPhoneDto> phones) {
     if (phones == null)
       return null;
 
     List<PhoneEntity> entities = new ArrayList<>();
     phones.forEach(phone -> {
       PhoneEntity entity = new PhoneEntity();
-      entity
-          .setCountryCode(phone.countryCode() == null ? null : Byte.parseByte(phone.countryCode()));
-      entity.setCityCode(Byte.parseByte(phone.cityCode()));
+      entity.setCountryCode(
+          phone.countryCode() == null ? null : Short.parseShort(phone.countryCode()));
+      entity.setCityCode(Short.parseShort(phone.cityCode()));
       entity.setPhoneNumber(Long.parseLong(phone.number()));
 
       entities.add(entity);
@@ -102,7 +112,7 @@ public class UserServiceImpl implements UserService {
     return entities;
   }
 
-  private List<UserPhoneDto> phoneEntitiesToDtos(List<PhoneEntity> phones) {
+  List<UserPhoneDto> phoneEntitiesToDtos(List<PhoneEntity> phones) {
     if (phones == null)
       return null;
 

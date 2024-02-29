@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Table(name = "phones")
 @Getter
 @Setter
+@EqualsAndHashCode(of = {"countryCode", "cityCode", "phoneNumber"})
 public class PhoneEntity {
 
   @Id
@@ -22,10 +24,10 @@ public class PhoneEntity {
   private UUID id;
 
   @Column(name = "country_code")
-  private Byte countryCode;
+  private Short countryCode;
 
   @Column(name = "city_code")
-  private Byte cityCode;
+  private Short cityCode;
 
   @Column(name = "phone_number")
   private Long phoneNumber;

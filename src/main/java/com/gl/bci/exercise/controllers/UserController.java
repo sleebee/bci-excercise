@@ -25,10 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController implements UserApi {
 
   @Value("${bci.user.password.pattern}")
-  private String passwordPattern;
+  String passwordPattern;
 
   @Value("${bci.user.password.comment}")
-  private String passwordComment;
+  String passwordComment;
 
   private final UserService service;
 
@@ -67,7 +67,7 @@ public class UserController implements UserApi {
    * @param userToCreate
    * @return a validation error, or null if all checks passed
    */
-  private UserResponseDto validateUser(UserDto userToCreate) {
+  UserResponseDto validateUser(UserDto userToCreate) {
     if (userToCreate == null)
       return new UserResponseDto("The user object cannot be null");
 
